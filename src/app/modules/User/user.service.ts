@@ -13,6 +13,17 @@ const getAllUsers = async () => {
     return users;
 };
 
+const getUserById = async (id: string) => {
+    const user = await User.findById(id);
+
+    if (!user) {
+        throw new HttpError(404, 'No user found with ID');
+    }
+
+    return user;
+};
+
 export const UserServices = {
     getAllUsers,
+    getUserById,
 }
