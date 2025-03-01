@@ -24,7 +24,7 @@ const getUserById = async (id: string) => {
     return user;
 };
 
-const updateUserById = async (id: string, payload: Partial<TUser>, userEmail?: string, userPhoneNumber?: string) => {
+const updateUserById = async (id: string, payload: Partial<TUser>, identifier?: string) => {
     const user = await User.findOne({ _id: id, isDeleted: false });
 
     // check if user exists
@@ -40,9 +40,13 @@ const updateUserById = async (id: string, payload: Partial<TUser>, userEmail?: s
         );
     }
 
+    // console.log(identifier, "identifier")
+    // console.log(user.email, "user email")
+    // console.log(user)
+
     // check if either userEmail or userPhoneNumber matches the stored user data
-    const isEmailMatch = userEmail && user.email === userEmail;
-    const isPhoneNumberMatch = userPhoneNumber && user.phoneNumber === userPhoneNumber;
+    const isEmailMatch = identifier && user.email === identifier;
+    const isPhoneNumberMatch = identifier && user.phoneNumber === identifier;
 
     if (!(isEmailMatch || isPhoneNumberMatch)) {
         throw new HttpError(403, 'You are not allowed to update this user');
@@ -57,8 +61,7 @@ const updateUserById = async (id: string, payload: Partial<TUser>, userEmail?: s
     return updatedUser;
 };
 
-const deleteUserById = async (id: string, userEmail?: string,
-    userPhoneNumber?: string) => {
+const deleteUserById = async (id: string, identifier?: string) => {
     const user = await User.findOne({ _id: id, isDeleted: false });
 
     // check if user is exists
@@ -75,8 +78,8 @@ const deleteUserById = async (id: string, userEmail?: string,
     }
 
     // Ensure the logged-in user can only delete their own account
-    const isEmailMatch = userEmail && user.email === userEmail;
-    const isPhoneNumberMatch = userPhoneNumber && user.phoneNumber === userPhoneNumber;
+    const isEmailMatch = identifier && user.email === identifier;
+    const isPhoneNumberMatch = identifier && user.phoneNumber === identifier;
 
 
     if (!(isEmailMatch || isPhoneNumberMatch)) {

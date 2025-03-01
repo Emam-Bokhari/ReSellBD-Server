@@ -13,7 +13,7 @@ const getAllUsersController = asyncHandler(async (req, res) => {
     });
 });
 
-const getUserController = asyncHandler(async (req, res) => {
+const getUserControllerById = asyncHandler(async (req, res) => {
     const id = req.params.id;
     const user = await UserServices.getUserById(id);
 
@@ -25,7 +25,36 @@ const getUserController = asyncHandler(async (req, res) => {
     });
 });
 
+const updateUserControllerById = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { identifier } = req.user;
+    const updatedPayload = req.body;
+    const updatedUser = await UserServices.updateUserById(id, updatedPayload, identifier);
+
+    sendResponse(res, {
+        success: true,
+        message: 'User update successfully',
+        statusCode: 200,
+        data: updatedUser,
+    });
+});
+
+const deleteUserControllerById = asyncHandler(async (req, res) => {
+    const id = req.params.id;
+    const { identifier } = req.user;
+    await UserServices.deleteUserById(id, identifier);
+    sendResponse(res, {
+        success: true,
+        message: "User deleted successfully",
+        statusCode: 200,
+        data: {}
+    })
+})
+
+
 export const UserControllers = {
     getAllUsersController,
-    getUserController,
+    getUserControllerById,
+    updateUserControllerById,
+    deleteUserControllerById,
 }
