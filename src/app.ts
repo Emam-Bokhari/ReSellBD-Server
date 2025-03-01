@@ -8,12 +8,11 @@ app.use(express.json());
 app.use(cors());
 
 // application routes
-app.use("/api/v1", router)
+app.use('/api/v1', router);
 
 // check server health
 app.get('/', (req: Request, res: Response) => {
-    res.send('Server is running...');
+  res.send('Server is running...');
 });
-
 
 export default app;

@@ -5,15 +5,14 @@ import { UserRoutes } from '../modules/User/user.route';
 const router = express.Router();
 
 const moduleRoutes = [
-    {
-        path: '/auth',
-        route: AuthRoutes,
-    },
-    {
-        path: '/users',
-        route: UserRoutes,
-    },
-
+  {
+    path: '/auth',
+    route: AuthRoutes,
+  },
+  {
+    path: '/users',
+    route: UserRoutes,
+  },
 ];
 
 moduleRoutes.forEach((route) => router.use(route.path, route.route));
