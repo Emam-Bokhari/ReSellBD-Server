@@ -3,6 +3,16 @@ import { TUser } from "../User/user.interface";
 import { User } from "../User/user.model";
 
 const registerUser = async (payload: TUser) => {
+
+    // check email or phone number is provided
+    if (!payload.email && !payload.phoneNumber) {
+        throw new HttpError(
+            400,
+            "Either email or phone number is required for registration."
+        );
+    }
+
+    // check if user is exists
     const existingUser = await User.isUserExists(payload?.email as string || payload?.phoneNumber as string);
 
     if (existingUser) {
