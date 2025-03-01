@@ -1,5 +1,7 @@
 import { model, Schema } from "mongoose";
 import { TUser, UserModel } from "./user.interface";
+import bcrypt from 'bcrypt';
+import config from "../../config";
 
 const userSchema = new Schema<TUser, UserModel>({
     name: {
@@ -11,11 +13,13 @@ const userSchema = new Schema<TUser, UserModel>({
         type: String,
         trim: true,
         unique: true,
+        sparse: true, // allow multiple documents to have null values
     },
     phoneNumber: {
         type: String,
         trim: true,
         unique: true,
+        sparse: true, // allow multiple documents to have null values
     },
     password: {
         type: String,
@@ -48,6 +52,21 @@ const userSchema = new Schema<TUser, UserModel>({
         versionKey: false
     }
 )
+
+// hashed password by bcrypt
+userSchema.pre('save', async function (next) {
+    this.password = await bcrypt.hash(
+        this.password,
+        Number(config.bcrypt_salt_rounds),
+    );
+    next();
+});
+
+// password field is empty
+userSchema.post('save', function (doc, next) {
+    doc.password = '';
+    next();
+});
 
 // statics method for check if user exists
 userSchema.statics.isUserExists = async function (identifier: string) {
