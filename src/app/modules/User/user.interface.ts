@@ -3,5 +3,7 @@ export type TUser = {
     email?: string;
     phoneNumber?: string;
     password: string;
-    role: "user" | "admin"
+    role?: "user" | "admin",
+    status?: "active" | "banned",
+    isDeleted?: false,
 }
