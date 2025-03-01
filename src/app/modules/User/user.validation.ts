@@ -1,15 +1,14 @@
 import { z } from "zod";
 
-const registerUserValidationSchema = z.object({
+const updateUserValidationSchema = z.object({
     body: z.object({
-        name: z.string().trim().max(50, 'User name can not exceed 50 characters'),
+        name: z.string().trim().max(50, 'User name can not exceed 50 characters').optional(),
         email: z.string().trim().email().optional(),
         phoneNumber: z.string().trim().optional(),
-        password: z.string().trim(),
-        role: z.enum(['user', 'admin']).default('user'),
-        status: z.enum(['active', 'banned']).default('active'),
-        isDeleted: z.boolean().default(false),
-        // profile update 
+        password: z.string().trim().optional(),
+        role: z.enum(['user', 'admin']).default('user').optional(),
+        status: z.enum(['active', 'banned']).default('active').optional(),
+        isDeleted: z.boolean().default(false).optional(),
         profilePicture: z.string().trim().optional(),
         city: z.string().trim().optional(),
         address: z.string().trim().optional(),
@@ -22,6 +21,6 @@ const registerUserValidationSchema = z.object({
     }),
 });
 
-export const AuthValidationSchema = {
-    registerUserValidationSchema,
+export const UserValidationSchema = {
+    updateUserValidationSchema,
 }

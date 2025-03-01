@@ -10,6 +10,16 @@ export interface TUser extends Document {
     role?: "user" | "admin",
     status?: "active" | "banned",
     isDeleted?: false,
+    // profile update related additional fields
+    profilePicture?: string;
+    city?: string;
+    address?: string;
+    postalCode?: string;
+    country?: string;
+    gender?: "male" | "female";
+    bio?: string;
+    facebook?: string;
+    website?: string;
 }
 
 export type TUserRole = keyof typeof USER_ROLE;
