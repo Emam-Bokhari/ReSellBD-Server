@@ -1,6 +1,9 @@
 import { model, Schema } from 'mongoose';
 import { TListing } from './listing.interface';
-import { excludeDeletedAggregation, excludeDeletedQuery } from '../../../utils/moduleSpecific/queryFilters';
+import {
+  excludeDeletedAggregation,
+  excludeDeletedQuery,
+} from '../../../utils/moduleSpecific/queryFilters';
 
 const listingSchema = new Schema<TListing>(
   {
@@ -93,10 +96,10 @@ const listingSchema = new Schema<TListing>(
 );
 
 // query middleware for soft delete by utils
-listingSchema.pre("find", excludeDeletedQuery);
-listingSchema.pre("findOne", excludeDeletedQuery);
+listingSchema.pre('find', excludeDeletedQuery);
+listingSchema.pre('findOne', excludeDeletedQuery);
 
 // aggregation middleware for soft delete by utils
-listingSchema.pre("aggregate", excludeDeletedAggregation)
+listingSchema.pre('aggregate', excludeDeletedAggregation);
 
 export const Listing = model<TListing>('Listing', listingSchema);

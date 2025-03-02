@@ -16,7 +16,11 @@ router.post(
 
 router.get('/', ListingControllers.getAllListingsController);
 
-router.get('/byUser', auth(USER_ROLE.user, USER_ROLE.admin), ListingControllers.getListingsBySpecificUserController);
+router.get(
+  '/byUser',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  ListingControllers.getListingsBySpecificUserController,
+);
 
 router.get('/:id', ListingControllers.getListingByIdController);
 

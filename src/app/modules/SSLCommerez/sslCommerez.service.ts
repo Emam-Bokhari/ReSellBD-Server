@@ -8,18 +8,18 @@ const store_pass = config.ssl.store_pass as string;
 const is_live = false; // true for live false for sandbox
 
 const initiatePayment = async (paymentData: any) => {
-    const sslcz = new SSLCommerzPayment(store_id, store_pass, is_live);
+  const sslcz = new SSLCommerzPayment(store_id, store_pass, is_live);
 
-    try {
-        const apiResponse = await sslcz.init({
-            ...paymentData,
-        });
-        return apiResponse.GatewayPageURL;
-    } catch (error: any) {
-        throw new HttpError(400, 'Failed to initiate payment');
-    }
+  try {
+    const apiResponse = await sslcz.init({
+      ...paymentData,
+    });
+    return apiResponse.GatewayPageURL;
+  } catch (error: any) {
+    throw new HttpError(400, 'Failed to initiate payment');
+  }
 };
 
 export const SSLCommerzService = {
-    initiatePayment,
+  initiatePayment,
 };

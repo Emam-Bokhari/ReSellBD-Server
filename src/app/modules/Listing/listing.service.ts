@@ -27,18 +27,20 @@ const getAllListings = async () => {
 const getListingsBySpecificUser = async (identifier: string) => {
   const user = await User.isUserExists(identifier);
   if (!user) {
-    throw new HttpError(404, "User not found")
-  };
+    throw new HttpError(404, 'User not found');
+  }
 
-  const listings = await Listing.find({ userID: user._id }).populate("userID", "_id name identifier role");
+  const listings = await Listing.find({ userID: user._id }).populate(
+    'userID',
+    '_id name identifier role',
+  );
 
   if (listings.length === 0) {
-    throw new HttpError(404, "No listing were found provide this user ID")
+    throw new HttpError(404, 'No listing were found provide this user ID');
   }
 
   return listings;
-
-}
+};
 
 const getListingById = async (id: string) => {
   const listing = await Listing.findById(id).populate(

@@ -28,7 +28,6 @@ const getAllListingsController = asyncHandler(async (req, res) => {
 });
 
 const getListingsBySpecificUserController = asyncHandler(async (req, res) => {
-
   const { identifier } = req.user;
   const listings = await ListingServices.getListingsBySpecificUser(identifier);
 
