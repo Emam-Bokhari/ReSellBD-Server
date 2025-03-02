@@ -24,6 +24,7 @@ const getAllListings = async () => {
   return listings;
 };
 
+
 const getListingById = async (id: string) => {
   const listing = await Listing.findById(id).populate(
     'userID',
