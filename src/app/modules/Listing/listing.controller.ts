@@ -27,6 +27,19 @@ const getAllListingsController = asyncHandler(async (req, res) => {
   });
 });
 
+const getListingsBySpecificUserController = asyncHandler(async (req, res) => {
+
+  const { identifier } = req.user;
+  const listings = await ListingServices.getListingsBySpecificUser(identifier);
+
+  sendResponse(res, {
+    success: true,
+    message: 'Listings are retrieved successfully',
+    statusCode: 200,
+    data: listings,
+  });
+});
+
 const getListingByIdController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const listing = await ListingServices.getListingById(id);
@@ -73,6 +86,7 @@ const deleteListingByIdController = asyncHandler(async (req, res) => {
 export const ListingControllers = {
   createListingController,
   getAllListingsController,
+  getListingsBySpecificUserController,
   getListingByIdController,
   updateListingByIdController,
   deleteListingByIdController,

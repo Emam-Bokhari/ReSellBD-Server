@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { HttpError } from "../../errors/HttpError";
 import { Listing } from "../Listing/listing.model";
 import { User } from "../User/user.model";
@@ -73,7 +74,7 @@ const createTransaction = async (payload: TTransaction, identifier: string) => {
             createdOrder,
             paymentUrl: paymentResponse,
         };
-    } catch (err) {
+    } catch (err: any) {
         throw new HttpError(500, 'Failed to initiate payment.');
     }
 }
@@ -113,7 +114,7 @@ const getPurchasesHistoryBySpecificUser = async (identifier: string) => {
         throw new HttpError(404, "User not found")
     }
 
-    const purchasesHistory = await Transaction.find({ buyerID: user._id });
+    const purchasesHistory = await Transaction.find({ buyerID: user._id }).populate("buyerID", "_id name identifier role").populate("sellerID", "_id name identifier role").populate("itemID");
     // console.log(purchasesHistory)
 
     if (purchasesHistory.length === 0) {
@@ -131,9 +132,8 @@ const getSalesHistoryBySpecificUser = async (identifier: string) => {
         throw new HttpError(404, "User not found")
     }
 
-    const salesHistory = await Transaction.find({ sellerID: user._id });
+    const salesHistory = await Transaction.find({ sellerID: user._id }).populate("buyerID", "_id name identifier role").populate("sellerID", "_id name identifier role").populate("itemID");;
     // console.log(salesHistory)
-
 
     if (salesHistory.length === 0) {
         throw new HttpError(404, "No sales history found for this user");

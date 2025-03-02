@@ -5,14 +5,17 @@ const transactionSchema = new Schema<TTransaction>({
     buyerID: {
         type: Schema.ObjectId,
         required: true,
+        ref: "User"
     },
     sellerID: {
         type: Schema.ObjectId,
         required: true,
+        ref: "User"
     },
     itemID: {
         type: Schema.ObjectId,
         required: true,
+        ref: "Listing"
     },
     status: {
         type: String,
