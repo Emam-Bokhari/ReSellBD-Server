@@ -69,7 +69,16 @@ const listingSchema = new Schema<TListing>({
     contactNumber: {
         type: String,
         trim: true,
+    },
+    isDeleted: {
+        type: Boolean,
+        default: false,
     }
-})
+},
+    {
+        timestamps: true,
+        versionKey: false
+    }
+)
 
 export const Listing = model<TListing>("Listing", listingSchema);

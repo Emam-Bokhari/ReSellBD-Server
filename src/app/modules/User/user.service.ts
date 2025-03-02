@@ -58,7 +58,7 @@ const updateUserById = async (
   return updatedUser;
 };
 
-const deleteUserById = async (id: string, identifier?: string) => {
+const deleteUserById = async (id: string, identifier: string) => {
   const user = await User.findOne({ _id: id, isDeleted: false });
 
   // check if user is exists

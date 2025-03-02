@@ -14,4 +14,5 @@ export type TListing = {
     negotiable?: boolean;
     warranty?: "yes" | "no";
     contactNumber?: string;
+    isDeleted?: false;
 }
