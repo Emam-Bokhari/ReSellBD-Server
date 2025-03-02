@@ -19,7 +19,19 @@ const transactionSchema = new Schema<TTransaction>({
         enum: {
             values: ["pending", "completed"],
             message: '{VALUE} is not a valid status'
-        }
+        },
+        default: "pending"
+    },
+    paymentMethod: {
+        type: String,
+        enum: {
+            values: ["online"],
+            message: '{VALUE} is not a valid payment method'
+        },
+        default: "online"
+    },
+    transactionId: {
+        type: String,
     }
 },
     {
