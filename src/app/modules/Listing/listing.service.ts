@@ -121,6 +121,33 @@ const deleteListingById = async (id: string, identifier: string) => {
   return deletedListing;
 };
 
+const deleteListingByAdmin = async (id: string, identifier: string) => {
+
+  const user = await User.isUserExists(identifier);
+
+  if (!user) {
+    throw new HttpError(404, "User not found")
+  }
+
+  // Check if the user is an admin
+  if (user.role !== 'admin') {
+    throw new HttpError(403, 'You are not authorized to perform this action');
+  }
+
+  const deletedListing = await Listing.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { isDeleted: true },
+    { new: true },
+  );
+
+  if (!deletedListing) {
+    throw new HttpError(404, "No listing were found in the database")
+  }
+
+  return deletedListing;
+};
+
+
 export const ListingServices = {
   createListing,
   getAllListings,
@@ -128,4 +155,5 @@ export const ListingServices = {
   getListingById,
   updateListingById,
   deleteListingById,
+  deleteListingByAdmin,
 };

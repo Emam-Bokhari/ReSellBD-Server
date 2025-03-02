@@ -82,6 +82,18 @@ const deleteListingByIdController = asyncHandler(async (req, res) => {
   });
 });
 
+const deleteListingByAdmin = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const { identifier } = req.user;
+  await ListingServices.deleteListingByAdmin(id, identifier);
+  sendResponse(res, {
+    success: true,
+    message: "Listing deleted successfully",
+    statusCode: 200,
+    data: {}
+  })
+})
+
 export const ListingControllers = {
   createListingController,
   getAllListingsController,
@@ -89,4 +101,5 @@ export const ListingControllers = {
   getListingByIdController,
   updateListingByIdController,
   deleteListingByIdController,
+  deleteListingByAdmin,
 };
