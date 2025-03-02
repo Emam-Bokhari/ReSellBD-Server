@@ -31,6 +31,8 @@ router.patch(
   ListingControllers.updateListingByIdController,
 );
 
+router.patch("/:id/status", auth(USER_ROLE.user, USER_ROLE.admin), ListingControllers.updateListingStatusByIdController)
+
 router.delete(
   '/:id',
   auth(USER_ROLE.user, USER_ROLE.admin),
