@@ -96,15 +96,15 @@ const updateListingStatusById = async (id: string, status: string, identifier: s
   if (!user) throw new HttpError(404, "User not found");
 
   // update listing status
-  const updatedListing = await Listing.findOneAndUpdate(
+  const updatedListingStatus = await Listing.findOneAndUpdate(
     { _id: id, userID: user._id },
     { status },
     { runValidators: true, new: true }
   );
 
-  if (!updatedListing) throw new HttpError(403, "You are not allowed to update this listing status");
+  if (!updatedListingStatus) throw new HttpError(403, "You are not allowed to update this listing status");
 
-  return updatedListing;
+  return updatedListingStatus;
 };
 
 
