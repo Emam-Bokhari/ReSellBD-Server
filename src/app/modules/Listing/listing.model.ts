@@ -30,7 +30,7 @@ const listingSchema = new Schema<TListing>({
     },
     userID: {
         type: Schema.ObjectId,
-        // ref: "User"
+        ref: "User"
     },
     status: {
         type: String,

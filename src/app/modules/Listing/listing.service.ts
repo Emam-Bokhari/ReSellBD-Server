@@ -14,7 +14,7 @@ const createListing = async (payload: TListing, identifier: string) => {
 }
 
 const getAllListings = async () => {
-    const listings = await Listing.find();
+    const listings = await Listing.find().populate("userID", "_id name identifier role");
     if (listings.length === 0) {
         throw new HttpError(404, 'No listing record were found in the database');
     }
@@ -22,7 +22,7 @@ const getAllListings = async () => {
 }
 
 const getListingById = async (id: string) => {
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("userID", "_id name identifier role");
     if (!listing) {
         throw new HttpError(404, 'No listing found with ID');
     }
