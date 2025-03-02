@@ -1,100 +1,112 @@
-import { HttpError } from "../../errors/HttpError";
-import { User } from "../User/user.model";
-import { TListing } from "./listing.interface";
-import { Listing } from "./listing.model";
+import { HttpError } from '../../errors/HttpError';
+import { User } from '../User/user.model';
+import { TListing } from './listing.interface';
+import { Listing } from './listing.model';
 
 const createListing = async (payload: TListing, identifier: string) => {
-    const user = await User.findOne({ identifier: identifier })
-    if (!user) {
-        throw new HttpError(404, "User not found")
-    }
-    payload.userID = user?._id;
-    const createdListing = await Listing.create(payload);
-    return createdListing;
-}
+  const user = await User.findOne({ identifier: identifier });
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
+  payload.userID = user?._id;
+  const createdListing = await Listing.create(payload);
+  return createdListing;
+};
 
 const getAllListings = async () => {
-    const listings = await Listing.find().populate("userID", "_id name identifier role");
-    if (listings.length === 0) {
-        throw new HttpError(404, 'No listing record were found in the database');
-    }
-    return listings;
-}
+  const listings = await Listing.find().populate(
+    'userID',
+    '_id name identifier role',
+  );
+  if (listings.length === 0) {
+    throw new HttpError(404, 'No listing record were found in the database');
+  }
+  return listings;
+};
 
 const getListingById = async (id: string) => {
-    const listing = await Listing.findById(id).populate("userID", "_id name identifier role");
-    if (!listing) {
-        throw new HttpError(404, 'No listing found with ID');
-    }
-    return listing;
-}
+  const listing = await Listing.findById(id).populate(
+    'userID',
+    '_id name identifier role',
+  );
+  if (!listing) {
+    throw new HttpError(404, 'No listing found with ID');
+  }
+  return listing;
+};
 
-const updateListingById = async (id: string, payload: Partial<TListing>, identifier: string) => {
+const updateListingById = async (
+  id: string,
+  payload: Partial<TListing>,
+  identifier: string,
+) => {
+  // check if user is exists
+  const userExists = await User.isUserExists(identifier);
 
-    // check if user is exists
-    const userExists = await User.isUserExists(identifier);
+  if (!userExists) {
+    throw new HttpError(404, 'User not found');
+  }
 
-    if (!userExists) {
-        throw new HttpError(404, "User not found")
-    }
+  const user = await User.findOne({ identifier: identifier });
 
-    const user = await User.findOne({ identifier: identifier })
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
 
-    if (!user) {
-        throw new HttpError(404, "User not found")
-    }
+  const listing = await Listing.findOne({ _id: id, userID: user._id });
 
-    const listing = await Listing.findOne({ _id: id, userID: user._id })
+  if (!listing) {
+    throw new HttpError(403, 'You are not allowed to update this listing');
+  }
 
-    if (!listing) {
-        throw new HttpError(403, "You are not allowed to update this listing")
-    }
+  const updatedListing = await Listing.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    payload,
+    { new: true, runValidators: true },
+  );
 
-    const updatedListing = await Listing.findOneAndUpdate(
-        { _id: id, isDeleted: false },
-        payload,
-        { new: true, runValidators: true },
-    );
+  if (!updatedListing) {
+    throw new HttpError(404, 'No listing found with ID');
+  }
 
-    if (!updatedListing) {
-        throw new HttpError(404, 'No listing found with ID');
-    }
-
-    return updatedListing;
-}
+  return updatedListing;
+};
 
 const deleteListingById = async (id: string, identifier: string) => {
+  // check if user is exists
+  const userExists = await User.isUserExists(identifier);
 
-    // check if user is exists
-    const userExists = await User.isUserExists(identifier)
+  if (!userExists) {
+    throw new HttpError(404, 'User not found');
+  }
 
-    if (!userExists) {
-        throw new HttpError(404, "User not found")
-    }
+  // find the user by identifier
+  const user = await User.findOne({ identifier: identifier });
 
-    // find the user by identifier
-    const user = await User.findOne({ identifier: identifier })
+  if (!user) {
+    throw new HttpError(404, 'User not found');
+  }
 
-    if (!user) {
-        throw new HttpError(404, "User not found")
-    }
+  // find the listing by its id and check if it belongs to the user
+  const listing = await Listing.findOne({ _id: id, userID: user._id });
 
-    // find the listing by its id and check if it belongs to the user
-    const listing = await Listing.findOne({ _id: id, userID: user._id })
+  if (!listing) {
+    throw new HttpError(403, 'You are not allowed to delete this listing');
+  }
 
-    if (!listing) {
-        throw new HttpError(403, "You are not allowed to delete this listing")
-    }
+  const deletedListing = await Listing.findOneAndUpdate(
+    { _id: id },
+    { isDeleted: true },
+    { new: true },
+  );
 
-    const deletedListing = await Listing.findOneAndUpdate({ _id: id, }, { isDeleted: true }, { new: true })
-
-    return deletedListing;
-}
+  return deletedListing;
+};
 
 export const ListingServices = {
-    createListing,
-    getAllListings,
-    getListingById,
-    updateListingById,
-    deleteListingById,
-}
+  createListing,
+  getAllListings,
+  getListingById,
+  updateListingById,
+  deleteListingById,
+};
