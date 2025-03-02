@@ -1,16 +1,20 @@
 import express from "express";
 import { ListingControllers } from "./listing.controller";
+import { auth } from "../../middleware/auth";
+import { USER_ROLE } from "../User/user.constant";
+import { validateRequestSchema } from "../../middleware/validateRequestSchema";
+import { ListingValidationSchema } from "./listing.validation";
 
 const router = express.Router();
 
-router.post("/", ListingControllers.createListingController);
+router.post("/", auth(USER_ROLE.user, USER_ROLE.admin), validateRequestSchema(ListingValidationSchema.createListingValidationSchema), ListingControllers.createListingController);
 
 router.get("/", ListingControllers.getAllListingsController);
 
 router.get("/:id", ListingControllers.getListingByIdController);
 
-router.patch("/:id", ListingControllers.updateListingByIdController);
+router.patch("/:id", auth(USER_ROLE.user, USER_ROLE.admin), validateRequestSchema(ListingValidationSchema.updateListingValidationSchema), ListingControllers.updateListingByIdController);
 
-router.delete("/:id", ListingControllers.deleteListingByIdController)
+router.delete("/:id", auth(USER_ROLE.user, USER_ROLE.admin), ListingControllers.deleteListingByIdController)
 
 export const ListingRoutes = router;

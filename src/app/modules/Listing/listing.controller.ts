@@ -4,7 +4,8 @@ import { ListingServices } from "./listing.service";
 
 const createListingController = asyncHandler(async (req, res) => {
     const listingPayload = req.body;
-    const createdListing = await ListingServices.createListing(listingPayload);
+    const { identifier } = req.user;
+    const createdListing = await ListingServices.createListing(listingPayload, identifier);
     sendResponse(res, {
         success: true,
         message: "Listing is created successfully",

@@ -3,7 +3,12 @@ import { User } from "../User/user.model";
 import { TListing } from "./listing.interface";
 import { Listing } from "./listing.model";
 
-const createListing = async (payload: TListing) => {
+const createListing = async (payload: TListing, identifier: string) => {
+    const user = await User.findOne({ identifier: identifier })
+    if (!user) {
+        throw new HttpError(404, "User not found")
+    }
+    payload.userID = user?._id;
     const createdListing = await Listing.create(payload);
     return createdListing;
 }
@@ -39,7 +44,7 @@ const updateListingById = async (id: string, payload: Partial<TListing>, identif
         throw new HttpError(404, "User not found")
     }
 
-    const listing = await Listing.findOne({ _id: id, userID: user._id, isDeleted: false })
+    const listing = await Listing.findOne({ _id: id, userID: user._id })
 
     if (!listing) {
         throw new HttpError(403, "You are not allowed to update this listing")
