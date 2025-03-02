@@ -6,8 +6,8 @@ export type TListing = {
     price: number;
     condition: "new" | "likeNew" | "used" | "refurbished";
     images: string[];
-    userID: Types.ObjectId;
-    status: "available" | "sold";
+    userID?: Types.ObjectId;
+    status?: "available" | "sold";
     category: "mobiles" | "electronics" | "vehicles" | "property" | "home" | "pets" | "cloths" | "sports";
     brand?: string;
     location: string;
