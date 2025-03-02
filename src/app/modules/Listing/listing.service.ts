@@ -90,6 +90,24 @@ const updateListingById = async (
   return updatedListing;
 };
 
+const updateListingStatusById = async (id: string, status: string, identifier: string) => {
+  // check if user exists
+  const user = await User.isUserExists(identifier);
+  if (!user) throw new HttpError(404, "User not found");
+
+  // update listing status
+  const updatedListing = await Listing.findOneAndUpdate(
+    { _id: id, userID: user._id },
+    { status },
+    { runValidators: true, new: true }
+  );
+
+  if (!updatedListing) throw new HttpError(403, "You are not allowed to update this listing status");
+
+  return updatedListing;
+};
+
+
 const deleteListingById = async (id: string, identifier: string) => {
   // check if user is exists
   const userExists = await User.isUserExists(identifier);
@@ -153,6 +171,7 @@ export const ListingServices = {
   getAllListings,
   getListingsBySpecificUser,
   getListingById,
+  updateListingStatusById,
   updateListingById,
   deleteListingById,
   deleteListingByAdmin,
