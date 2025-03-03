@@ -3,7 +3,7 @@ import { TListing } from './listing.interface';
 import {
   excludeDeletedAggregation,
   excludeDeletedQuery,
-} from '../../../utils/moduleSpecific/queryFilters';
+} from '../../utils/moduleSpecific/queryFilters';
 
 const listingSchema = new Schema<TListing>(
   {

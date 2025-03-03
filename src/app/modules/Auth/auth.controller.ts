@@ -1,5 +1,5 @@
-import { asyncHandler } from '../../../utils/global/asyncHandler';
-import { sendResponse } from '../../../utils/global/sendResponse';
+import { asyncHandler } from '../../utils/global/asyncHandler';
+import { sendResponse } from '../../utils/global/sendResponse';
 import { AuthServices } from './auth.service';
 
 const registerUserController = asyncHandler(async (req, res) => {

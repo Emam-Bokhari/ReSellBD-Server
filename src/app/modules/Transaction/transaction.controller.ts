@@ -1,6 +1,6 @@
 import { Document } from 'mongoose';
-import { asyncHandler } from '../../../utils/global/asyncHandler';
-import { sendResponse } from '../../../utils/global/sendResponse';
+import { asyncHandler } from '../../utils/global/asyncHandler';
+import { sendResponse } from '../../utils/global/sendResponse';
 import { TransactionServices } from './transaction.service';
 
 const createTransactionController = asyncHandler(async (req, res) => {

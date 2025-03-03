@@ -4,7 +4,7 @@ import jwt, { JwtPayload } from 'jsonwebtoken';
 import config from '../config';
 import { User } from '../modules/User/user.model';
 import { TUserRole } from '../modules/User/user.interface';
-import { asyncHandler } from '../../utils/global/asyncHandler';
+import { asyncHandler } from '../utils/global/asyncHandler';
 
 export const auth = (...requiredRoles: TUserRole[]) => {
   return asyncHandler(

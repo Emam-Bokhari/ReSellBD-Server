@@ -5,7 +5,7 @@ import config from '../../config';
 import {
   excludeDeletedAggregation,
   excludeDeletedQuery,
-} from '../../../utils/moduleSpecific/queryFilters';
+} from '../../utils/moduleSpecific/queryFilters';
 
 const userSchema = new Schema<TUser, UserModel>(
   {

@@ -17,7 +17,7 @@ router.post(
 );
 
 router.patch(
-  '/:id',
+  '/:id/status',
   auth(USER_ROLE.user, USER_ROLE.admin),
   TransactionControllers.updateTransactionStatusByIdController,
 );

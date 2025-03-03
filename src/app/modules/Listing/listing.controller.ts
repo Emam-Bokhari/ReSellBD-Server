@@ -1,5 +1,5 @@
-import { asyncHandler } from '../../../utils/global/asyncHandler';
-import { sendResponse } from '../../../utils/global/sendResponse';
+import { asyncHandler } from '../../utils/global/asyncHandler';
+import { sendResponse } from '../../utils/global/sendResponse';
 import { ListingServices } from './listing.service';
 
 const createListingController = asyncHandler(async (req, res) => {
