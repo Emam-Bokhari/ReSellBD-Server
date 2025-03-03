@@ -44,8 +44,12 @@ const updateTransactionStatusByIdController = asyncHandler(async (req, res) => {
 const getPurchasesHistoryBySpecificUserController = asyncHandler(
   async (req, res) => {
     const { identifier } = req.user;
+    const query = req.query;
     const purchasesHistory =
-      await TransactionServices.getPurchasesHistoryBySpecificUser(identifier);
+      await TransactionServices.getPurchasesHistoryBySpecificUser(
+        identifier,
+        query,
+      );
 
     sendResponse(res, {
       success: true,
@@ -59,8 +63,12 @@ const getPurchasesHistoryBySpecificUserController = asyncHandler(
 const getSalesHistoryBySpecificUserController = asyncHandler(
   async (req, res) => {
     const { identifier } = req.user;
+    const query = req.query;
     const salesHistory =
-      await TransactionServices.getSalesHistoryBySpecificUser(identifier);
+      await TransactionServices.getSalesHistoryBySpecificUser(
+        identifier,
+        query,
+      );
 
     sendResponse(res, {
       success: true,

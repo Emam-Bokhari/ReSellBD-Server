@@ -31,7 +31,11 @@ router.patch(
   ListingControllers.updateListingByIdController,
 );
 
-router.patch("/:id/status", auth(USER_ROLE.user, USER_ROLE.admin), ListingControllers.updateListingStatusByIdController)
+router.patch(
+  '/:id/status',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  ListingControllers.updateListingStatusByIdController,
+);
 
 router.delete(
   '/:id',
@@ -39,6 +43,10 @@ router.delete(
   ListingControllers.deleteListingByIdController,
 );
 
-router.delete("/admin/:id", auth(USER_ROLE.admin), ListingControllers.deleteListingByAdmin)
+router.delete(
+  '/admin/:id',
+  auth(USER_ROLE.admin),
+  ListingControllers.deleteListingByAdmin,
+);
 
 export const ListingRoutes = router;

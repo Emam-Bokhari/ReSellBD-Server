@@ -1,15 +1,22 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
 import { TUser } from './user.interface';
 import { User } from './user.model';
 
-const getAllUsers = async () => {
-  const users = await User.find();
+const getAllUsers = async (query: Record<string, unknown>) => {
+  const userQuery = new QueryBuilder(User.find(), query).sortBy().paginate();
 
-  if (users.length === 0) {
+  const meta = await userQuery.countTotal();
+  const result = await userQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No user record were found in the database');
   }
 
-  return users;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getUserById = async (id: string) => {
@@ -58,18 +65,24 @@ const updateUserById = async (
   return updatedUser;
 };
 
-const updateUserStatusById = async (id: string, status: string, identifier: string) => {
-
+const updateUserStatusById = async (
+  id: string,
+  status: string,
+  identifier: string,
+) => {
   const user = await User.isUserExists(identifier);
-  if (!user) throw new HttpError(404, "User not found")
+  if (!user) throw new HttpError(404, 'User not found');
 
-  const updatedStatus = await User.findOneAndUpdate({ _id: id, isDeleted: false }, { status: status }, { runValidators: true, new: true });
+  const updatedStatus = await User.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { status: status },
+    { runValidators: true, new: true },
+  );
 
-  if (!updatedStatus) throw new HttpError(404, "No user found with this ID");
+  if (!updatedStatus) throw new HttpError(404, 'No user found with this ID');
 
   return updatedStatus;
-
-}
+};
 
 const deleteUserById = async (id: string, identifier: string) => {
   const user = await User.findOne({ _id: id, isDeleted: false });

@@ -16,11 +16,14 @@ const createListing = async (payload: TListing, identifier: string) => {
 };
 
 const getAllListings = async (query: Record<string, unknown>) => {
-
-  const listingQuery = new QueryBuilder(Listing.find().populate(
-    'userID',
-    '_id name identifier role',
-  ), query).search(searchableFields).filter().sortBy().paginate()
+  const listingQuery = new QueryBuilder(
+    Listing.find().populate('userID', '_id name identifier role'),
+    query,
+  )
+    .search(searchableFields)
+    .filter()
+    .sortBy()
+    .paginate();
 
   const meta = await listingQuery.countTotal();
   const result = await listingQuery.modelQuery;
@@ -30,26 +33,41 @@ const getAllListings = async (query: Record<string, unknown>) => {
   }
   return {
     meta,
-    result
+    result,
   };
 };
 
-const getListingsBySpecificUser = async (identifier: string) => {
+const getListingsBySpecificUser = async (
+  identifier: string,
+  query: Record<string, unknown>,
+) => {
   const user = await User.isUserExists(identifier);
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
-  const listings = await Listing.find({ userID: user._id }).populate(
-    'userID',
-    '_id name identifier role',
-  );
+  const listingQuery = new QueryBuilder(
+    Listing.find({ userID: user._id }).populate(
+      'userID',
+      '_id name identifier role',
+    ),
+    query,
+  )
+    .filter()
+    .sortBy()
+    .paginate();
 
-  if (listings.length === 0) {
+  const meta = await listingQuery.countTotal();
+  const result = await listingQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No listing were found provide this user ID');
   }
 
-  return listings;
+  return {
+    meta,
+    result,
+  };
 };
 
 const getListingById = async (id: string) => {
@@ -100,23 +118,30 @@ const updateListingById = async (
   return updatedListing;
 };
 
-const updateListingStatusById = async (id: string, status: string, identifier: string) => {
+const updateListingStatusById = async (
+  id: string,
+  status: string,
+  identifier: string,
+) => {
   // check if user exists
   const user = await User.isUserExists(identifier);
-  if (!user) throw new HttpError(404, "User not found");
+  if (!user) throw new HttpError(404, 'User not found');
 
   // update listing status
   const updatedListingStatus = await Listing.findOneAndUpdate(
     { _id: id, userID: user._id },
     { status },
-    { runValidators: true, new: true }
+    { runValidators: true, new: true },
   );
 
-  if (!updatedListingStatus) throw new HttpError(403, "You are not allowed to update this listing status");
+  if (!updatedListingStatus)
+    throw new HttpError(
+      403,
+      'You are not allowed to update this listing status',
+    );
 
   return updatedListingStatus;
 };
-
 
 const deleteListingById = async (id: string, identifier: string) => {
   // check if user is exists
@@ -150,11 +175,10 @@ const deleteListingById = async (id: string, identifier: string) => {
 };
 
 const deleteListingByAdmin = async (id: string, identifier: string) => {
-
   const user = await User.isUserExists(identifier);
 
   if (!user) {
-    throw new HttpError(404, "User not found")
+    throw new HttpError(404, 'User not found');
   }
 
   // Check if the user is an admin
@@ -169,12 +193,11 @@ const deleteListingByAdmin = async (id: string, identifier: string) => {
   );
 
   if (!deletedListing) {
-    throw new HttpError(404, "No listing were found in the database")
+    throw new HttpError(404, 'No listing were found in the database');
   }
 
   return deletedListing;
 };
-
 
 export const ListingServices = {
   createListing,

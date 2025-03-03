@@ -15,7 +15,11 @@ router.patch(
   UserControllers.updateUserControllerById,
 );
 
-router.patch("/:id/status", auth(USER_ROLE.admin), UserControllers.updateUserStatusByIdController);
+router.patch(
+  '/:id/status',
+  auth(USER_ROLE.admin),
+  UserControllers.updateUserStatusByIdController,
+);
 
 router.delete(
   '/:id',
