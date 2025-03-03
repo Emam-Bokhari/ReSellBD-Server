@@ -18,12 +18,16 @@ const createListingController = asyncHandler(async (req, res) => {
 });
 
 const getAllListingsController = asyncHandler(async (req, res) => {
-  const listings = await ListingServices.getAllListings();
+
+  const query = req.query;
+
+  const result = await ListingServices.getAllListings(query);
   sendResponse(res, {
     success: true,
     message: 'Listings are retrieved successfully',
     statusCode: 200,
-    data: listings,
+    meta: result.meta,
+    data: result.result,
   });
 });
 

@@ -1,7 +1,9 @@
+import QueryBuilder from '../../builder/QueryBuilder';
 import { HttpError } from '../../errors/HttpError';
 import { User } from '../User/user.model';
 import { TListing } from './listing.interface';
 import { Listing } from './listing.model';
+import { searchableFields } from './listing.utils';
 
 const createListing = async (payload: TListing, identifier: string) => {
   const user = await User.findOne({ identifier: identifier });
@@ -13,15 +15,23 @@ const createListing = async (payload: TListing, identifier: string) => {
   return createdListing;
 };
 
-const getAllListings = async () => {
-  const listings = await Listing.find().populate(
+const getAllListings = async (query: Record<string, unknown>) => {
+
+  const listingQuery = new QueryBuilder(Listing.find().populate(
     'userID',
     '_id name identifier role',
-  );
-  if (listings.length === 0) {
+  ), query).search(searchableFields).filter().sortBy().paginate()
+
+  const meta = await listingQuery.countTotal();
+  const result = await listingQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No listing record were found in the database');
   }
-  return listings;
+  return {
+    meta,
+    result
+  };
 };
 
 const getListingsBySpecificUser = async (identifier: string) => {
