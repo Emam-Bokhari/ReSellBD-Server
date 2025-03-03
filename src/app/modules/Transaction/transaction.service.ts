@@ -6,6 +6,7 @@ import { TTransaction } from './transaction.interface';
 import { generateTransactionId } from './transaction.utils';
 import { Transaction } from './transaction.model';
 import { SSLCommerzService } from '../SSLCommerez/sslCommerez.service';
+import QueryBuilder from '../../builder/QueryBuilder';
 
 const createTransaction = async (payload: TTransaction, identifier: string) => {
   // check if buyer is exists
@@ -108,44 +109,70 @@ const updateTransactionStatusById = async (
   return updatedStatus;
 };
 
-const getPurchasesHistoryBySpecificUser = async (identifier: string) => {
+const getPurchasesHistoryBySpecificUser = async (
+  identifier: string,
+  query: Record<string, unknown>,
+) => {
   const user = await User.isUserExists(identifier);
   // console.log(user)
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
-  const purchasesHistory = await Transaction.find({ buyerID: user._id })
-    .populate('buyerID', '_id name identifier role')
-    .populate('sellerID', '_id name identifier role')
-    .populate('itemID');
-  // console.log(purchasesHistory)
+  const purchasesHistoryQuery = new QueryBuilder(
+    Transaction.find({ buyerID: user._id })
+      .populate('buyerID', '_id name identifier role')
+      .populate('sellerID', '_id name identifier role')
+      .populate('itemID'),
+    query,
+  )
+    .sortBy()
+    .paginate();
 
-  if (purchasesHistory.length === 0) {
+  const meta = await purchasesHistoryQuery.countTotal();
+  const result = await purchasesHistoryQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No purchases history found for this user');
   }
 
-  return purchasesHistory;
+  return {
+    meta,
+    result,
+  };
 };
 
-const getSalesHistoryBySpecificUser = async (identifier: string) => {
+const getSalesHistoryBySpecificUser = async (
+  identifier: string,
+  query: Record<string, unknown>,
+) => {
   const user = await User.isUserExists(identifier);
   // console.log(user)
   if (!user) {
     throw new HttpError(404, 'User not found');
   }
 
-  const salesHistory = await Transaction.find({ sellerID: user._id })
-    .populate('buyerID', '_id name identifier role')
-    .populate('sellerID', '_id name identifier role')
-    .populate('itemID');
-  // console.log(salesHistory)
+  const salesHistoryQuery = new QueryBuilder(
+    Transaction.find({ sellerID: user._id })
+      .populate('buyerID', '_id name identifier role')
+      .populate('sellerID', '_id name identifier role')
+      .populate('itemID'),
+    query,
+  )
+    .sortBy()
+    .paginate();
 
-  if (salesHistory.length === 0) {
+  const meta = await salesHistoryQuery.countTotal();
+  const result = await salesHistoryQuery.modelQuery;
+
+  if (result.length === 0) {
     throw new HttpError(404, 'No sales history found for this user');
   }
 
-  return salesHistory;
+  return {
+    meta,
+    result,
+  };
 };
 
 export const TransactionServices = {

@@ -18,7 +18,6 @@ const createListingController = asyncHandler(async (req, res) => {
 });
 
 const getAllListingsController = asyncHandler(async (req, res) => {
-
   const query = req.query;
 
   const result = await ListingServices.getAllListings(query);
@@ -32,8 +31,12 @@ const getAllListingsController = asyncHandler(async (req, res) => {
 });
 
 const getListingsBySpecificUserController = asyncHandler(async (req, res) => {
+  const query = req.query;
   const { identifier } = req.user;
-  const listings = await ListingServices.getListingsBySpecificUser(identifier);
+  const listings = await ListingServices.getListingsBySpecificUser(
+    identifier,
+    query,
+  );
 
   sendResponse(res, {
     success: true,
@@ -75,15 +78,19 @@ const updateListingStatusByIdController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { identifier } = req.user;
   const { status } = req.body;
-  const updatedListingStatus = await ListingServices.updateListingStatusById(id, status, identifier)
+  const updatedListingStatus = await ListingServices.updateListingStatusById(
+    id,
+    status,
+    identifier,
+  );
 
   sendResponse(res, {
     success: true,
-    message: "Update listing status successfully",
+    message: 'Update listing status successfully',
     statusCode: 200,
     data: updatedListingStatus,
-  })
-})
+  });
+});
 
 const deleteListingByIdController = asyncHandler(async (req, res) => {
   const id = req.params.id;
@@ -106,11 +113,11 @@ const deleteListingByAdmin = asyncHandler(async (req, res) => {
   await ListingServices.deleteListingByAdmin(id, identifier);
   sendResponse(res, {
     success: true,
-    message: "Listing deleted successfully",
+    message: 'Listing deleted successfully',
     statusCode: 200,
-    data: {}
-  })
-})
+    data: {},
+  });
+});
 
 export const ListingControllers = {
   createListingController,

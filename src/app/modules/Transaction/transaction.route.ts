@@ -9,7 +9,10 @@ const router = express.Router();
 
 router.post(
   '/',
-  auth(USER_ROLE.user, USER_ROLE.admin), validateRequestSchema(TransactionValidationSchema.createTransactionValidationSchema),
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  validateRequestSchema(
+    TransactionValidationSchema.createTransactionValidationSchema,
+  ),
   TransactionControllers.createTransactionController,
 );
 

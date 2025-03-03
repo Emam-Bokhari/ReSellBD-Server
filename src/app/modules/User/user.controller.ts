@@ -3,7 +3,8 @@ import { sendResponse } from '../../../utils/global/sendResponse';
 import { UserServices } from './user.service';
 
 const getAllUsersController = asyncHandler(async (req, res) => {
-  const users = await UserServices.getAllUsers();
+  const query = req.query;
+  const users = await UserServices.getAllUsers(query);
 
   sendResponse(res, {
     success: true,
@@ -47,14 +48,18 @@ const updateUserStatusByIdController = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { identifier } = req.user;
   const { status } = req.body;
-  const updatedStatus = await UserServices.updateUserStatusById(id, status, identifier);
+  const updatedStatus = await UserServices.updateUserStatusById(
+    id,
+    status,
+    identifier,
+  );
   sendResponse(res, {
     success: true,
-    message: "User status updated successfully",
+    message: 'User status updated successfully',
     statusCode: 200,
     data: updatedStatus,
-  })
-})
+  });
+});
 
 const deleteUserControllerById = asyncHandler(async (req, res) => {
   const id = req.params.id;
