@@ -58,6 +58,19 @@ const updateUserById = async (
   return updatedUser;
 };
 
+const updateUserStatusById = async (id: string, status: string, identifier: string) => {
+
+  const user = await User.isUserExists(identifier);
+  if (!user) throw new HttpError(404, "User not found")
+
+  const updatedStatus = await User.findOneAndUpdate({ _id: id, isDeleted: false }, { status: status }, { runValidators: true, new: true });
+
+  if (!updatedStatus) throw new HttpError(404, "No user found with this ID");
+
+  return updatedStatus;
+
+}
+
 const deleteUserById = async (id: string, identifier: string) => {
   const user = await User.findOne({ _id: id, isDeleted: false });
 
@@ -94,5 +107,6 @@ export const UserServices = {
   getAllUsers,
   getUserById,
   updateUserById,
+  updateUserStatusById,
   deleteUserById,
 };

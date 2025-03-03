@@ -43,6 +43,19 @@ const updateUserControllerById = asyncHandler(async (req, res) => {
   });
 });
 
+const updateUserStatusByIdController = asyncHandler(async (req, res) => {
+  const id = req.params.id;
+  const { identifier } = req.user;
+  const { status } = req.body;
+  const updatedStatus = await UserServices.updateUserStatusById(id, status, identifier);
+  sendResponse(res, {
+    success: true,
+    message: "User status updated successfully",
+    statusCode: 200,
+    data: updatedStatus,
+  })
+})
+
 const deleteUserControllerById = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { identifier } = req.user;
@@ -59,5 +72,6 @@ export const UserControllers = {
   getAllUsersController,
   getUserControllerById,
   updateUserControllerById,
+  updateUserStatusByIdController,
   deleteUserControllerById,
 };
