@@ -119,8 +119,10 @@ const getPurchasesHistoryBySpecificUser = async (
     throw new HttpError(404, 'User not found');
   }
 
+  const activeListingIds = await Listing.find({ isDeleted: false }).distinct('_id')
+
   const purchasesHistoryQuery = new QueryBuilder(
-    Transaction.find({ buyerID: user._id })
+    Transaction.find({ buyerID: user._id, itemID: { $in: activeListingIds } })
       .populate('buyerID', '_id name identifier role')
       .populate('sellerID', '_id name identifier role')
       .populate('itemID'),
@@ -152,8 +154,10 @@ const getSalesHistoryBySpecificUser = async (
     throw new HttpError(404, 'User not found');
   }
 
+  const activeListingIds = await Listing.find({ isDeleted: false }).distinct('_id')
+
   const salesHistoryQuery = new QueryBuilder(
-    Transaction.find({ sellerID: user._id })
+    Transaction.find({ sellerID: user._id, itemID: { $in: activeListingIds } })
       .populate('buyerID', '_id name identifier role')
       .populate('sellerID', '_id name identifier role')
       .populate('itemID'),
