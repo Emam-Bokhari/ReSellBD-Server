@@ -4,18 +4,18 @@ import { PaymentControllers } from './payment.controller';
 const router = express.Router();
 
 router.post(
-    '/payment-success/:transactionId',
-    PaymentControllers.paymentSuccessController,
+  '/payment-success/:transactionId',
+  PaymentControllers.paymentSuccessController,
 );
 
 router.post(
-    '/payment-fail/:transactionId',
-    PaymentControllers.paymentFailController,
+  '/payment-fail/:transactionId',
+  PaymentControllers.paymentFailController,
 );
 
 router.post(
-    '/payment-cancel/:transactionId',
-    PaymentControllers.paymentCancelController,
+  '/payment-cancel/:transactionId',
+  PaymentControllers.paymentCancelController,
 );
 
 export const PaymentRoutes = router;
