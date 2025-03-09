@@ -105,7 +105,8 @@ const getPurchasesHistoryBySpecificUser = (identifier, query) => __awaiter(void 
     if (!user) {
         throw new HttpError_1.HttpError(404, 'User not found');
     }
-    const purchasesHistoryQuery = new QueryBuilder_1.default(transaction_model_1.Transaction.find({ buyerID: user._id })
+    const activeListingIds = yield listing_model_1.Listing.find({ isDeleted: false }).distinct('_id');
+    const purchasesHistoryQuery = new QueryBuilder_1.default(transaction_model_1.Transaction.find({ buyerID: user._id, itemID: { $in: activeListingIds } })
         .populate('buyerID', '_id name identifier role')
         .populate('sellerID', '_id name identifier role')
         .populate('itemID'), query)
@@ -127,7 +128,8 @@ const getSalesHistoryBySpecificUser = (identifier, query) => __awaiter(void 0, v
     if (!user) {
         throw new HttpError_1.HttpError(404, 'User not found');
     }
-    const salesHistoryQuery = new QueryBuilder_1.default(transaction_model_1.Transaction.find({ sellerID: user._id })
+    const activeListingIds = yield listing_model_1.Listing.find({ isDeleted: false }).distinct('_id');
+    const salesHistoryQuery = new QueryBuilder_1.default(transaction_model_1.Transaction.find({ sellerID: user._id, itemID: { $in: activeListingIds } })
         .populate('buyerID', '_id name identifier role')
         .populate('sellerID', '_id name identifier role')
         .populate('itemID'), query)

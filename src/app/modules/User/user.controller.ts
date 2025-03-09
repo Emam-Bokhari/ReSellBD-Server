@@ -26,6 +26,17 @@ const getUserControllerById = asyncHandler(async (req, res) => {
   });
 });
 
+const getMeController = asyncHandler(async (req, res) => {
+  const { identifier } = req.user;
+  const user = await UserServices.getMe(identifier);
+  sendResponse(res, {
+    success: true,
+    message: "User profile retrieve successfully",
+    statusCode: 200,
+    data: user,
+  })
+})
+
 const updateUserControllerById = asyncHandler(async (req, res) => {
   const id = req.params.id;
   const { identifier } = req.user;
@@ -76,6 +87,7 @@ const deleteUserControllerById = asyncHandler(async (req, res) => {
 export const UserControllers = {
   getAllUsersController,
   getUserControllerById,
+  getMeController,
   updateUserControllerById,
   updateUserStatusByIdController,
   deleteUserControllerById,
