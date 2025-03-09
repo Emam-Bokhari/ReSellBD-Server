@@ -31,11 +31,11 @@ const getMeController = asyncHandler(async (req, res) => {
   const user = await UserServices.getMe(identifier);
   sendResponse(res, {
     success: true,
-    message: "User profile retrieve successfully",
+    message: 'User profile retrieve successfully',
     statusCode: 200,
     data: user,
-  })
-})
+  });
+});
 
 const updateUserControllerById = asyncHandler(async (req, res) => {
   const id = req.params.id;

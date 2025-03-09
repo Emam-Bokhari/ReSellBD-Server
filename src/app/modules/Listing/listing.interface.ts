@@ -9,17 +9,17 @@ export type TListing = {
   userID?: Types.ObjectId;
   status?: 'available' | 'sold';
   category:
-  | 'mobiles'
-  | 'electronics'
-  | 'vehicles'
-  | 'property'
-  | 'home'
-  | 'pets'
-  | 'cloths'
-  | 'sports';
+    | 'mobiles'
+    | 'electronics'
+    | 'vehicles'
+    | 'property'
+    | 'home'
+    | 'pets'
+    | 'cloths'
+    | 'sports';
   brand?: string;
   location: string;
-  negotiable?: "yes" | "no";
+  negotiable?: 'yes' | 'no';
   warranty?: string;
   contactNumber?: string;
   isDeleted?: false;

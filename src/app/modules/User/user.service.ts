@@ -29,24 +29,22 @@ const getUserById = async (id: string) => {
   return user;
 };
 
-
 const getMe = async (identifier: string) => {
   if (!identifier) {
-    throw new Error("Identifier is required to retrieve user information.");
+    throw new Error('Identifier is required to retrieve user information.');
   }
 
   // check if the user exists
   const existingUser = await User.isUserExists(identifier);
 
   if (!existingUser) {
-    throw new Error("User not found.");
+    throw new Error('User not found.');
   }
 
-  const user = await User.findOne({ identifier }).select("-password");
+  const user = await User.findOne({ identifier }).select('-password');
 
   return user;
 };
-
 
 const updateUserById = async (
   id: string,

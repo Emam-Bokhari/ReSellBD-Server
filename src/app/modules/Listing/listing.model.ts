@@ -73,9 +73,9 @@ const listingSchema = new Schema<TListing>(
     negotiable: {
       type: String,
       enum: {
-        values: ["yes", "no"],
-        message: '{VALUE} is not a valid negotiable'
-      }
+        values: ['yes', 'no'],
+        message: '{VALUE} is not a valid negotiable',
+      },
     },
     warranty: {
       type: String,
