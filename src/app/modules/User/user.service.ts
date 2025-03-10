@@ -46,16 +46,17 @@ const getMe = async (identifier: string) => {
   return user;
 };
 
-const updateUser = async (
-  payload: Partial<TUser>,
-  identifier: string,
-) => {
-  const user = await User.isUserExists(identifier)
+const updateUser = async (payload: Partial<TUser>, identifier: string) => {
+  const user = await User.isUserExists(identifier);
   if (!user) {
-    throw new HttpError(404, "User not found")
+    throw new HttpError(404, 'User not found');
   }
 
-  const updatedProfile = await User.findOneAndUpdate({ identifier: identifier }, payload, { new: true, runValidators: true });
+  const updatedProfile = await User.findOneAndUpdate(
+    { identifier: identifier },
+    payload,
+    { new: true, runValidators: true },
+  );
 
   return updatedProfile;
 };

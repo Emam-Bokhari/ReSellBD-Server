@@ -38,13 +38,9 @@ const getMeController = asyncHandler(async (req, res) => {
 });
 
 const updateUserController = asyncHandler(async (req, res) => {
-
   const { identifier } = req.user;
   const updatedPayload = req.body;
-  const updatedUser = await UserServices.updateUser(
-    updatedPayload,
-    identifier,
-  );
+  const updatedUser = await UserServices.updateUser(updatedPayload, identifier);
 
   sendResponse(res, {
     success: true,
