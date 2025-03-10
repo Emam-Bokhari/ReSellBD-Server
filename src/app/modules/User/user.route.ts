@@ -16,7 +16,7 @@ router.get(
 router.get('/:id', UserControllers.getUserControllerById);
 
 router.patch(
-  '/',
+  '/update-profile',
   auth(USER_ROLE.user, USER_ROLE.admin),
   UserControllers.updateUserController,
 );
