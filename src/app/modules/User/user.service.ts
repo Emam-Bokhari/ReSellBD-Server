@@ -46,40 +46,18 @@ const getMe = async (identifier: string) => {
   return user;
 };
 
-const updateUserById = async (
-  id: string,
+const updateUser = async (
   payload: Partial<TUser>,
-  identifier?: string,
+  identifier: string,
 ) => {
-  const user = await User.findOne({ _id: id, isDeleted: false });
-
-  // check if user exists
+  const user = await User.isUserExists(identifier)
   if (!user) {
-    throw new HttpError(404, 'No user found with ID');
+    throw new HttpError(404, "User not found")
   }
 
-  // check if user is banned
-  if (user.status === 'banned') {
-    throw new HttpError(
-      403,
-      'Your account is banned. You cannot perform this action.',
-    );
-  }
+  const updatedProfile = await User.findOneAndUpdate({ identifier: identifier }, payload, { new: true, runValidators: true });
 
-  // Check if identifier matches the stored user data
-  const isIdentifierMatch = identifier && user.identifier === identifier;
-
-  if (!isIdentifierMatch) {
-    throw new HttpError(403, 'You are not allowed to update this user');
-  }
-
-  const updatedUser = await User.findOneAndUpdate(
-    { _id: id, isDeleted: false },
-    { $set: payload },
-    { new: true, runValidators: true },
-  );
-
-  return updatedUser;
+  return updatedProfile;
 };
 
 const updateUserStatusById = async (
@@ -137,7 +115,7 @@ export const UserServices = {
   getAllUsers,
   getUserById,
   getMe,
-  updateUserById,
+  updateUser,
   updateUserStatusById,
   deleteUserById,
 };

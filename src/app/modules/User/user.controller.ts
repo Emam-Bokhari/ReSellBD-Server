@@ -37,12 +37,11 @@ const getMeController = asyncHandler(async (req, res) => {
   });
 });
 
-const updateUserControllerById = asyncHandler(async (req, res) => {
-  const id = req.params.id;
+const updateUserController = asyncHandler(async (req, res) => {
+
   const { identifier } = req.user;
   const updatedPayload = req.body;
-  const updatedUser = await UserServices.updateUserById(
-    id,
+  const updatedUser = await UserServices.updateUser(
     updatedPayload,
     identifier,
   );
@@ -88,7 +87,7 @@ export const UserControllers = {
   getAllUsersController,
   getUserControllerById,
   getMeController,
-  updateUserControllerById,
+  updateUserController,
   updateUserStatusByIdController,
   deleteUserControllerById,
 };
