@@ -18,25 +18,18 @@ const createListingController = asyncHandler(async (req, res) => {
 });
 
 const getAllListingsController = asyncHandler(async (req, res) => {
-  const query = req.query;
-
-  const result = await ListingServices.getAllListings(query);
+  const listings = await ListingServices.getAllListings();
   sendResponse(res, {
     success: true,
     message: 'Listings are retrieved successfully',
     statusCode: 200,
-    meta: result.meta,
-    data: result.result,
+    data: listings,
   });
 });
 
 const getListingsBySpecificUserController = asyncHandler(async (req, res) => {
-  const query = req.query;
   const { identifier } = req.user;
-  const listings = await ListingServices.getListingsBySpecificUser(
-    identifier,
-    query,
-  );
+  const listings = await ListingServices.getListingsBySpecificUser(identifier);
 
   sendResponse(res, {
     success: true,
