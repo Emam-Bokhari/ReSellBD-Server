@@ -12,13 +12,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.PaymentControllers = void 0;
 const asyncHandler_1 = require("../../utils/global/asyncHandler");
 const paymentSuccessController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.redirect(`http://localhost:3000/success`);
+    res.redirect(`https://re-sell-bd-client.vercel.app/success`);
 }));
 const paymentFailController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.redirect(`http://localhost:3000/failed`);
+    res.redirect(`https://re-sell-bd-client.vercel.app/failed`);
 }));
 const paymentCancelController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    res.redirect(`http://localhost:3000/cancelled`);
+    res.redirect(`https://re-sell-bd-client.vercel.app/cancelled`);
 }));
 exports.PaymentControllers = {
     paymentSuccessController,
