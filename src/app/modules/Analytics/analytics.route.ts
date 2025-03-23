@@ -21,4 +21,10 @@ router.get(
   AnalyticsControllers.getTotalSalesController,
 );
 
+router.get(
+  '/monthly-sales',
+  auth(USER_ROLE.user, USER_ROLE.admin),
+  AnalyticsControllers.getSalesAnalyticsForCurrentMonthController,
+);
+
 export const AnalyticsRoutes = router;

@@ -1,3 +1,4 @@
+import moment from 'moment';
 import { HttpError } from '../../errors/HttpError';
 import { Listing } from '../Listing/listing.model';
 import { Transaction } from '../Transaction/transaction.model';
@@ -45,8 +46,77 @@ export const getTotalSales = async (identifier: string) => {
   return totalSales;
 };
 
+
+const getSalesAnalyticsForCurrentMonth = async (identifier: string) => {
+  // get the start and end date of the current month dynamically
+  const startOfMonth = moment().startOf('month').toDate();
+  const endOfMonth = moment().endOf('month').toDate();
+
+  const user = await User.isUserExists(identifier);
+
+  if (!user) throw new HttpError(404, 'User not found');
+
+
+  const result = await Transaction.aggregate([
+    {
+      $match: {
+        createdAt: {
+          $gte: startOfMonth,
+          $lt: endOfMonth,
+        },
+        status: 'completed',
+        sellerID: user._id,
+      },
+    },
+    {
+      $lookup: {
+        from: 'listings',
+        localField: 'itemID',
+        foreignField: '_id',
+        as: 'listingDetails',
+      },
+    },
+    {
+      $unwind: '$listingDetails',
+    },
+    {
+      $project: {
+        day: { $dayOfMonth: '$createdAt' },
+        price: '$listingDetails.price',
+      },
+    },
+    {
+      $group: {
+        _id: '$day',
+        totalSales: { $sum: 1 },
+        totalRevenue: { $sum: '$price' },
+      },
+    },
+    {
+      $sort: { _id: 1 },
+    },
+  ]);
+
+  // create an array with all days of the current month, even if they have no sales
+  const daysInMonth = moment().daysInMonth();
+  const allDays = Array.from({ length: daysInMonth }, (_, i) => i + 1);
+
+  // create an object for each day of the month, filling missing days with 0 sales and revenue
+  const formattedResult = allDays.map((day) => {
+    const dayData = result.find((item) => item._id === day);
+    return {
+      date: `${moment().format('MMMM')} ${day}`,
+      totalSales: dayData ? dayData.totalSales : 0,
+      totalRevenue: dayData ? dayData.totalRevenue : 0,
+    };
+  });
+
+  return formattedResult;
+};
+
 export const AnalyticsServices = {
   getTotalProductsAdded,
   getTotalPurchases,
   getTotalSales,
+  getSalesAnalyticsForCurrentMonth,
 };

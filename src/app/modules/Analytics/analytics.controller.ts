@@ -35,8 +35,20 @@ const getTotalSalesController = asyncHandler(async (req, res) => {
   });
 });
 
+const getSalesAnalyticsForCurrentMonthController = asyncHandler(async (req, res) => {
+  const { identifier } = req.user;
+  const result = await AnalyticsServices.getSalesAnalyticsForCurrentMonth(identifier);
+  sendResponse(res, {
+    success: true,
+    message: 'Total sales in current month data retrieved successfully',
+    statusCode: 200,
+    data: result,
+  });
+});
+
 export const AnalyticsControllers = {
   getTotalProductsAddedController,
   getTotalPurchasesController,
   getTotalSalesController,
+  getSalesAnalyticsForCurrentMonthController,
 };
