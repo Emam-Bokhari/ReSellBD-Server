@@ -9,31 +9,30 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.AuthControllers = void 0;
+exports.NewsLetterControllers = void 0;
 const asyncHandler_1 = require("../../utils/global/asyncHandler");
 const sendResponse_1 = require("../../utils/global/sendResponse");
-const auth_service_1 = require("./auth.service");
-const registerUserController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const registerUserPayload = req.body;
-    const registeredUser = yield auth_service_1.AuthServices.registerUser(registerUserPayload);
+const newsLetter_service_1 = require("./newsLetter.service");
+const createNewsLetterController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newsLetterPayload = req.body;
+    const createdNewsLetter = yield newsLetter_service_1.NewsLetterServices.createNewsLetter(newsLetterPayload);
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
-        message: 'User registered successfully',
+        message: 'NewsLetter is created successfully',
         statusCode: 201,
-        data: registeredUser,
+        data: createdNewsLetter,
     });
 }));
-const loginUserController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
-    const loginUserPayload = req.body;
-    const loginResult = yield auth_service_1.AuthServices.loginUser(loginUserPayload);
+const getAllNewsLettersController = (0, asyncHandler_1.asyncHandler)((req, res) => __awaiter(void 0, void 0, void 0, function* () {
+    const newsLetters = yield newsLetter_service_1.NewsLetterServices.getAllNewsLetters();
     (0, sendResponse_1.sendResponse)(res, {
         success: true,
-        statusCode: 201,
-        message: 'User login successfully',
-        data: loginResult,
+        message: 'NewsLetters are retrieved successfully',
+        statusCode: 200,
+        data: newsLetters,
     });
 }));
-exports.AuthControllers = {
-    registerUserController,
-    loginUserController,
+exports.NewsLetterControllers = {
+    createNewsLetterController,
+    getAllNewsLettersController,
 };
