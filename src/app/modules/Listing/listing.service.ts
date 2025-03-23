@@ -25,12 +25,12 @@ const getAllListings = async () => {
 };
 
 const getListingsByCategory = async (category: string) => {
-  const listings = await Listing.find({ category })
+  const listings = await Listing.find({ category });
   if (listings.length === 0) {
     throw new HttpError(404, 'No listing record were found in the database');
   }
   return listings;
-}
+};
 
 const getListingsBySpecificUser = async (identifier: string) => {
   const user = await User.isUserExists(identifier);

@@ -1,3 +1,3 @@
 export type TNewsLetter = {
-    email: string;
-}
+  email: string;
+};

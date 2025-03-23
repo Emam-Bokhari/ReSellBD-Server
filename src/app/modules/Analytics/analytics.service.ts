@@ -46,7 +46,6 @@ export const getTotalSales = async (identifier: string) => {
   return totalSales;
 };
 
-
 const getSalesAnalyticsForCurrentMonth = async (identifier: string) => {
   // get the start and end date of the current month dynamically
   const startOfMonth = moment().startOf('month').toDate();
@@ -55,7 +54,6 @@ const getSalesAnalyticsForCurrentMonth = async (identifier: string) => {
   const user = await User.isUserExists(identifier);
 
   if (!user) throw new HttpError(404, 'User not found');
-
 
   const result = await Transaction.aggregate([
     {

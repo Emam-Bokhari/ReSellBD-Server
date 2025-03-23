@@ -1,11 +1,11 @@
-import { model, Schema } from "mongoose";
-import { TNewsLetter } from "./newsLetter.interface";
+import { model, Schema } from 'mongoose';
+import { TNewsLetter } from './newsLetter.interface';
 
 const newsLetterSchema = new Schema<TNewsLetter>({
-    email: {
-        type: String,
-        required: true,
-    }
-})
+  email: {
+    type: String,
+    required: true,
+  },
+});
 
-export const NewsLetter = model<TNewsLetter>("NewsLetter", newsLetterSchema);
+export const NewsLetter = model<TNewsLetter>('NewsLetter', newsLetterSchema);

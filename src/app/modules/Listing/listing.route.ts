@@ -16,7 +16,10 @@ router.post(
 
 router.get('/', ListingControllers.getAllListingsController);
 
-router.get('/category/:category', ListingControllers.getListingsByCategoryController);
+router.get(
+  '/category/:category',
+  ListingControllers.getListingsByCategoryController,
+);
 
 router.get(
   '/byUser',
