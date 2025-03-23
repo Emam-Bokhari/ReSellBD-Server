@@ -27,13 +27,24 @@ const getAllListingsController = asyncHandler(async (req, res) => {
   });
 });
 
+const getListingsByCategoryController = asyncHandler(async (req, res) => {
+  const category = req.params.category;
+  const listings = await ListingServices.getListingsByCategory(category);
+  sendResponse(res, {
+    success: true,
+    message: 'Category wise listings are retrieved successfully',
+    statusCode: 200,
+    data: listings,
+  });
+});
+
 const getListingsBySpecificUserController = asyncHandler(async (req, res) => {
   const { identifier } = req.user;
   const listings = await ListingServices.getListingsBySpecificUser(identifier);
 
   sendResponse(res, {
     success: true,
-    message: 'Listings are retrieved successfully',
+    message: 'Specific user wise listings are retrieved successfully',
     statusCode: 200,
     data: listings,
   });
@@ -115,6 +126,7 @@ const deleteListingByAdmin = asyncHandler(async (req, res) => {
 export const ListingControllers = {
   createListingController,
   getAllListingsController,
+  getListingsByCategoryController,
   getListingsBySpecificUserController,
   getListingByIdController,
   updateListingByIdController,

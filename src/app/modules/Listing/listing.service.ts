@@ -24,6 +24,14 @@ const getAllListings = async () => {
   return listings;
 };
 
+const getListingsByCategory = async (category: string) => {
+  const listings = await Listing.find({ category })
+  if (listings.length === 0) {
+    throw new HttpError(404, 'No listing record were found in the database');
+  }
+  return listings;
+}
+
 const getListingsBySpecificUser = async (identifier: string) => {
   const user = await User.isUserExists(identifier);
   if (!user) {
@@ -174,6 +182,7 @@ const deleteListingByAdmin = async (id: string, identifier: string) => {
 export const ListingServices = {
   createListing,
   getAllListings,
+  getListingsByCategory,
   getListingsBySpecificUser,
   getListingById,
   updateListingStatusById,
