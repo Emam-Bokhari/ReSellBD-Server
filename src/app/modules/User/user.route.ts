@@ -5,7 +5,7 @@ import { USER_ROLE } from './user.constant';
 
 const router = express.Router();
 
-router.get('/', UserControllers.getAllUsersController);
+router.get('/', auth(USER_ROLE.admin), UserControllers.getAllUsersController);
 
 router.get(
   '/me',
@@ -13,7 +13,11 @@ router.get(
   UserControllers.getMeController,
 );
 
-router.get('/:id', UserControllers.getUserControllerById);
+router.get(
+  '/:id',
+  auth(USER_ROLE.admin),
+  UserControllers.getUserControllerById,
+);
 
 router.patch(
   '/update-profile',
@@ -27,9 +31,15 @@ router.patch(
   UserControllers.updateUserStatusByIdController,
 );
 
+router.patch(
+  '/:id/role',
+  auth(USER_ROLE.admin),
+  UserControllers.updateUserRoleByIdController,
+);
+
 router.delete(
   '/:id',
-  auth(USER_ROLE.user, USER_ROLE.admin),
+  auth(USER_ROLE.admin),
   UserControllers.deleteUserControllerById,
 );
 

@@ -80,28 +80,28 @@ const updateUserStatusById = async (
   return updatedStatus;
 };
 
+const updateUserRoleById = async (
+  id: string,
+  role: string,
+  identifier: string,
+) => {
+  const user = await User.isUserExists(identifier);
+  if (!user) throw new HttpError(404, 'User not found');
+
+  const updatedStatus = await User.findOneAndUpdate(
+    { _id: id, isDeleted: false },
+    { role: role },
+    { runValidators: true, new: true },
+  );
+
+  if (!updatedStatus) throw new HttpError(404, 'No user found with this ID');
+
+  return updatedStatus;
+};
+
 const deleteUserById = async (id: string, identifier: string) => {
-  const user = await User.findOne({ _id: id, isDeleted: false });
-
-  // check if user is exists
-  if (!user) {
-    throw new HttpError(404, 'No user found with ID');
-  }
-
-  // check if user is banned
-  if (user.status === 'banned') {
-    throw new HttpError(
-      403,
-      'Your account is banned. You cannot perform this action.',
-    );
-  }
-
-  // Check if identifier matches the stored user data
-  const isIdentifierMatch = identifier && user.identifier === identifier;
-
-  if (!isIdentifierMatch) {
-    throw new HttpError(403, 'You are not allowed to update this user');
-  }
+  const user = await User.isUserExists(identifier);
+  if (!user) throw new HttpError(404, 'User not found');
 
   const deletedUser = await User.findOneAndUpdate(
     { _id: id },
@@ -118,5 +118,6 @@ export const UserServices = {
   getMe,
   updateUser,
   updateUserStatusById,
+  updateUserRoleById,
   deleteUserById,
 };
